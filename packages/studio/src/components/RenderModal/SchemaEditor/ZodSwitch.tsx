@@ -1,5 +1,6 @@
 import React from 'react';
 import {useZodTypesIfPossible} from '../../get-zod-if-possible';
+import {shouldUseDialKitColor} from './dialkit-control-kind';
 import type {AnyZodSchema} from './zod-schema-type';
 import {
 	getEffectsInner,
@@ -61,8 +62,9 @@ export const ZodSwitch: React.FC<{
 	if (typeName === 'string') {
 		// In v4, .refine() doesn't wrap in ZodEffects, so check brand here too
 		if (
-			zodTypes &&
-			description === zodTypes.ZodZypesInternals.REMOTION_COLOR_BRAND
+			(zodTypes &&
+				description === zodTypes.ZodZypesInternals.REMOTION_COLOR_BRAND) ||
+			shouldUseDialKitColor({jsonPath, value: value as string})
 		) {
 			return (
 				<ZodColorEditor

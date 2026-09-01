@@ -1,5 +1,6 @@
 import {expect, test} from 'bun:test';
 import {z} from 'zod';
+import {shouldUseDialKitColor} from '../components/RenderModal/SchemaEditor/dialkit-control-kind';
 import {
 	getDialKitLabel,
 	shouldOpenDialKitFolder,
@@ -48,5 +49,14 @@ test('snaps numeric slider output before Zod validation', () => {
 	expect(snapDialKitNumber({value: 57.8, min: 1, max: 64, step: 1})).toBe(58);
 	expect(snapDialKitNumber({value: 0.337, min: 0, max: 1, step: 0.01})).toBe(
 		0.34,
+	);
+});
+
+test('uses the DialKit color picker for conventional hex color props', () => {
+	expect(
+		shouldUseDialKitColor({jsonPath: ['backgroundColor'], value: '#ffffff'}),
+	).toBe(true);
+	expect(shouldUseDialKitColor({jsonPath: ['title'], value: '#ffffff'})).toBe(
+		false,
 	);
 });

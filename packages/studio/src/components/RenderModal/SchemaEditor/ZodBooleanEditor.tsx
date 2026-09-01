@@ -27,7 +27,7 @@ export const ZodBooleanEditor: React.FC<{
 
 	return (
 		<Fieldset shouldPad={mayPad}>
-			<div className="remotion-dialkit-toggle" style={fullWidth}>
+			<div style={fullWidth}>
 				<Toggle
 					label={getDialKitLabel(jsonPath)}
 					checked={value}

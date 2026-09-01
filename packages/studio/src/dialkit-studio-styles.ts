@@ -166,40 +166,4 @@ body,
   display: none;
 }
 
-.remotion-dialkit-toggle .dialkit-segmented {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  box-sizing: border-box;
-  height: 20px;
-  padding: 2px;
-  width: 36px;
-  transition: background 140ms, border-color 140ms, box-shadow 140ms;
-}
-
-.remotion-dialkit-toggle .dialkit-segmented:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.24);
-}
-
-.remotion-dialkit-toggle .dialkit-segmented-button {
-  box-sizing: border-box;
-  color: transparent !important;
-  font-size: 0 !important;
-  height: 14px;
-  padding: 0;
-  width: 15px;
-}
-
-.remotion-dialkit-toggle .dialkit-segmented-pill {
-  background: rgba(250, 248, 244, 0.94);
-  border-radius: 999px;
-  bottom: 2px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
-  top: 2px;
-}
-
-.remotion-dialkit-toggle .dialkit-labeled-control:has(.dialkit-segmented-button[data-active="true"]:last-child) .dialkit-segmented {
-  background: rgba(255, 255, 255, 0.22);
-}
 `;
