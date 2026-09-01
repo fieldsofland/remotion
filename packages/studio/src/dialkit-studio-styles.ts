@@ -115,4 +115,8 @@ body,
 .remotion-splitter-vertical:hover {
   background: rgba(255, 255, 255, 0.14);
 }
+
+.remotion-dialkit-easing-only .dialkit-labeled-control {
+  display: none;
+}
 `;

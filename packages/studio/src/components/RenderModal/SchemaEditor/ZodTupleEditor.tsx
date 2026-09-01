@@ -1,4 +1,4 @@
-import {TransitionControl, type TransitionConfig} from 'dialkit';
+import {DialStore, TransitionControl, type TransitionConfig} from 'dialkit';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {useZodIfPossible} from '../../get-zod-if-possible';
 import {getDialKitLabel} from './dialkit-label';
@@ -52,6 +52,18 @@ export const ZodTupleEditor: React.FC<{
 		/ease|easing/i.test(String(jsonPath[jsonPath.length - 1]));
 	const latestEase = useRef(value);
 	latestEase.current = value;
+	const easingPath = jsonPath.join('.');
+	if (
+		isEasingTuple &&
+		DialStore.getTransitionMode('remotion-schema-editor', easingPath) !==
+			'easing'
+	) {
+		DialStore.updateTransitionMode(
+			'remotion-schema-editor',
+			easingPath,
+			'easing',
+		);
+	}
 	const onEasingChange = useCallback(
 		(next: TransitionConfig) => {
 			if (next.type !== 'easing') {
@@ -78,10 +90,14 @@ export const ZodTupleEditor: React.FC<{
 	if (isEasingTuple) {
 		return (
 			<Fieldset shouldPad={mayPad}>
-				<div onPointerUp={saveEasing} onBlur={saveEasing}>
+				<div
+					className="remotion-dialkit-easing-only"
+					onPointerUp={saveEasing}
+					onBlur={saveEasing}
+				>
 					<TransitionControl
 						panelId="remotion-schema-editor"
-						path={jsonPath.join('.')}
+						path={easingPath}
 						label={getDialKitLabel(jsonPath)}
 						value={{
 							type: 'easing',

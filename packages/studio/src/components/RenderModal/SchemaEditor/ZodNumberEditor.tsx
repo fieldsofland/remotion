@@ -3,7 +3,10 @@ import {useMemo} from 'react';
 import React, {useCallback, useRef} from 'react';
 import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {getDialKitNumberConstraints} from './zod-number-constraints';
+import {
+	getDialKitNumberConstraints,
+	snapDialKitNumber,
+} from './zod-number-constraints';
 import {zodSafeParse, type AnyZodSchema} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import {ZodFieldValidation} from './ZodFieldValidation';
@@ -23,12 +26,17 @@ export const ZodNumberEditor: React.FC<{
 }> = ({jsonPath, value, schema, setValue, mayPad}) => {
 	const latestValue = useRef(value);
 	latestValue.current = value;
+	const constraints = useMemo(
+		() => getDialKitNumberConstraints({schema, value}),
+		[schema, value],
+	);
 	const onNumberChange = useCallback(
 		(newValue: number) => {
-			latestValue.current = newValue;
-			setValue(() => newValue, {shouldSave: false});
+			const snapped = snapDialKitNumber({...constraints, value: newValue});
+			latestValue.current = snapped;
+			setValue(() => snapped, {shouldSave: false});
 		},
-		[setValue],
+		[constraints, setValue],
 	);
 
 	const saveNumber = useCallback(() => {
@@ -37,10 +45,6 @@ export const ZodNumberEditor: React.FC<{
 
 	const zodValidation = useMemo(
 		() => zodSafeParse(schema, value),
-		[schema, value],
-	);
-	const constraints = useMemo(
-		() => getDialKitNumberConstraints({schema, value}),
 		[schema, value],
 	);
 

@@ -131,3 +131,19 @@ export const getDialKitNumberConstraints = ({
 		step,
 	};
 };
+
+export const snapDialKitNumber = ({
+	value,
+	min,
+	max,
+	step,
+}: {
+	readonly value: number;
+	readonly min: number;
+	readonly max: number;
+	readonly step: number;
+}): number => {
+	const precision = Math.max(0, (String(step).split('.')[1] ?? '').length);
+	const snapped = min + Math.round((value - min) / step) * step;
+	return Number(Math.min(max, Math.max(min, snapped)).toFixed(precision));
+};
