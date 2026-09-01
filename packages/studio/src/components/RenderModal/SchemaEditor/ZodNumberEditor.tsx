@@ -24,11 +24,12 @@ export const ZodNumberEditor: React.FC<{
 	readonly onRemove: null | (() => void);
 	readonly mayPad: boolean;
 }> = ({jsonPath, value, schema, setValue, mayPad}) => {
+	const initialValue = useRef(value).current;
 	const latestValue = useRef(value);
 	latestValue.current = value;
 	const constraints = useMemo(
-		() => getDialKitNumberConstraints({schema, value}),
-		[schema, value],
+		() => getDialKitNumberConstraints({schema, value: initialValue}),
+		[initialValue, schema],
 	);
 	const onNumberChange = useCallback(
 		(newValue: number) => {
