@@ -1,8 +1,8 @@
+import {Toggle} from 'dialkit';
 import React, {useCallback} from 'react';
-import {Checkbox} from '../../Checkbox';
+import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {SchemaLabel} from './SchemaLabel';
-import {getUserFacingDescription, type AnyZodSchema} from './zod-schema-type';
+import type {AnyZodSchema} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import type {UpdaterFunction} from './ZodSwitch';
 
@@ -17,30 +17,21 @@ export const ZodBooleanEditor: React.FC<{
 	readonly onRemove: null | (() => void);
 	readonly mayPad: boolean;
 	readonly schema: AnyZodSchema;
-}> = ({jsonPath, value, setValue, onRemove, mayPad, schema}) => {
-	const onToggle: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-		(e) => {
-			setValue(() => e.target.checked, {shouldSave: true});
+}> = ({jsonPath, value, setValue, mayPad}) => {
+	const onToggle = useCallback(
+		(checked: boolean) => {
+			setValue(() => checked, {shouldSave: true});
 		},
 		[setValue],
 	);
 
 	return (
 		<Fieldset shouldPad={mayPad}>
-			<SchemaLabel
-				handleClick={null}
-				jsonPath={jsonPath}
-				onRemove={onRemove}
-				valid
-				suffix={null}
-				description={getUserFacingDescription(schema)}
-			/>
 			<div style={fullWidth}>
-				<Checkbox
-					name={jsonPath.join('.')}
+				<Toggle
+					label={getDialKitLabel(jsonPath)}
 					checked={value}
 					onChange={onToggle}
-					disabled={false}
 				/>
 			</div>
 		</Fieldset>

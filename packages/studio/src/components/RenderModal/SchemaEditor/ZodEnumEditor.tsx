@@ -1,15 +1,9 @@
+import {SelectControl} from 'dialkit';
 import React, {useMemo} from 'react';
 import {useCallback} from 'react';
-import {Checkmark} from '../../../icons/Checkmark';
-import type {ComboboxValue} from '../../NewComposition/ComboBox';
-import {Combobox} from '../../NewComposition/ComboBox';
+import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {SchemaLabel} from './SchemaLabel';
-import {
-	zodSafeParse,
-	type AnyZodSchema,
-	getUserFacingDescription,
-} from './zod-schema-type';
+import {zodSafeParse, type AnyZodSchema} from './zod-schema-type';
 import {getEnumValues} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import {ZodFieldValidation} from './ZodFieldValidation';
@@ -26,7 +20,7 @@ export const ZodEnumEditor: React.FC<{
 	readonly setValue: UpdaterFunction<string>;
 	readonly onRemove: null | (() => void);
 	readonly mayPad: boolean;
-}> = ({schema, jsonPath, setValue, value, onRemove, mayPad}) => {
+}> = ({schema, jsonPath, setValue, value, mayPad}) => {
 	const onChange: UpdaterFunction<string> = useCallback(
 		(
 			updater: (oldV: string) => string,
@@ -39,26 +33,6 @@ export const ZodEnumEditor: React.FC<{
 
 	const enumValues = getEnumValues(schema);
 
-	const isRoot = jsonPath.length === 0;
-
-	const comboBoxValues = useMemo(() => {
-		return enumValues.map((option: string): ComboboxValue => {
-			return {
-				value: option,
-				label: option,
-				id: option,
-				keyHint: null,
-				leftItem: option === value ? <Checkmark /> : null,
-				onClick: (id: string) => {
-					onChange(() => id, {shouldSave: true});
-				},
-				quickSwitcherLabel: null,
-				subMenu: null,
-				type: 'item',
-			};
-		});
-	}, [enumValues, onChange, value]);
-
 	const zodValidation = useMemo(
 		() => zodSafeParse(schema, value),
 		[schema, value],
@@ -66,21 +40,12 @@ export const ZodEnumEditor: React.FC<{
 
 	return (
 		<Fieldset shouldPad={mayPad}>
-			<SchemaLabel
-				handleClick={null}
-				jsonPath={jsonPath}
-				onRemove={onRemove}
-				valid={zodValidation.success}
-				suffix={null}
-				description={getUserFacingDescription(schema)}
-			/>
-
-			<div style={isRoot ? undefined : container}>
-				<Combobox
-					values={comboBoxValues}
-					selectedId={value}
-					title={value}
-					size="small"
+			<div style={container}>
+				<SelectControl
+					label={getDialKitLabel(jsonPath)}
+					value={value}
+					options={enumValues}
+					onChange={(next) => onChange(() => next, {shouldSave: true})}
 				/>
 			</div>
 			<ZodFieldValidation path={jsonPath} zodValidation={zodValidation} />

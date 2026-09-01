@@ -1,14 +1,10 @@
+import {TextControl} from 'dialkit';
 import {useMemo} from 'react';
 import React, {useCallback} from 'react';
 import {useZodIfPossible} from '../../get-zod-if-possible';
-import {RemotionInput} from '../../NewComposition/RemInput';
+import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {SchemaLabel} from './SchemaLabel';
-import {
-	zodSafeParse,
-	type AnyZodSchema,
-	getUserFacingDescription,
-} from './zod-schema-type';
+import {zodSafeParse, type AnyZodSchema} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import {ZodFieldValidation} from './ZodFieldValidation';
 import type {UpdaterFunction} from './ZodSwitch';
@@ -24,7 +20,7 @@ export const ZodStringEditor: React.FC<{
 	readonly setValue: UpdaterFunction<string>;
 	readonly onRemove: null | (() => void);
 	readonly mayPad: boolean;
-}> = ({jsonPath, value, setValue, schema, onRemove, mayPad}) => {
+}> = ({jsonPath, value, setValue, schema, mayPad}) => {
 	const z = useZodIfPossible();
 	if (!z) {
 		throw new Error('expected zod');
@@ -35,37 +31,25 @@ export const ZodStringEditor: React.FC<{
 		[schema, value],
 	);
 
-	const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-		(e) => {
-			setValue(() => e.target.value, {shouldSave: false});
+	const onChange = useCallback(
+		(next: string) => {
+			setValue(() => next, {shouldSave: false});
 		},
 		[setValue],
 	);
 
-	const onBlur: React.FocusEventHandler<HTMLInputElement> = useCallback(() => {
+	const onBlur = useCallback(() => {
 		setValue(() => value, {shouldSave: true});
 	}, [setValue, value]);
 
 	return (
 		<Fieldset shouldPad={mayPad}>
-			<SchemaLabel
-				handleClick={null}
-				jsonPath={jsonPath}
-				onRemove={onRemove}
-				valid={zodValidation.success}
-				suffix={null}
-				description={getUserFacingDescription(schema)}
-			/>
-			<div style={fullWidth}>
-				<RemotionInput
+			<div style={fullWidth} onBlur={onBlur}>
+				<TextControl
+					label={getDialKitLabel(jsonPath)}
 					value={value}
-					status={zodValidation.success ? 'ok' : 'error'}
 					placeholder={jsonPath.join('.')}
 					onChange={onChange}
-					onBlur={onBlur}
-					rightAlign={false}
-					name={jsonPath.join('.')}
-					small
 				/>
 				<ZodFieldValidation path={jsonPath} zodValidation={zodValidation} />
 			</div>

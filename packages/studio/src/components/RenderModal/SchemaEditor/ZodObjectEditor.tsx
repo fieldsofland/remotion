@@ -1,14 +1,10 @@
+import {Folder} from 'dialkit';
 import {useCallback} from 'react';
-import React, {useMemo, useState} from 'react';
-import {fieldsetLabel} from '../layout';
+import React from 'react';
+import {getDialKitLabel, shouldOpenDialKitFolder} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {SchemaLabel} from './SchemaLabel';
 import {SchemaVerticalGuide} from './SchemaVerticalGuide';
-import {
-	zodSafeParse,
-	type AnyZodSchema,
-	getUserFacingDescription,
-} from './zod-schema-type';
+import type {AnyZodSchema} from './zod-schema-type';
 import {getObjectShape, getZodSchemaType} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import type {UpdaterFunction} from './ZodSwitch';
@@ -32,11 +28,9 @@ export const ZodObjectEditor: React.FC<{
 	jsonPath,
 	setValue,
 	value,
-	onRemove,
 	mayPad,
 	discriminatedUnionReplacement,
 }) => {
-	const [expanded, setExpanded] = useState(true);
 	const onChange: UpdaterFunction<Record<string, unknown>> = useCallback(
 		(
 			updater: (oldV: Record<string, unknown>) => Record<string, unknown>,
@@ -57,65 +51,56 @@ export const ZodObjectEditor: React.FC<{
 
 	const isRoot = jsonPath.length === 0;
 
-	const suffix = useMemo(() => {
-		return expanded ? ' {' : ' {...}';
-	}, [expanded]);
+	const fields = (
+		<Fieldset shouldPad={!isRoot && mayPad}>
+			<SchemaVerticalGuide isRoot={isRoot}>
+				{keys.map((key) => {
+					if (
+						discriminatedUnionReplacement &&
+						key === discriminatedUnionReplacement.discriminator
+					) {
+						return discriminatedUnionReplacement.markup;
+					}
 
-	const zodValidation = useMemo(
-		() => zodSafeParse(schema, value),
-		[schema, value],
+					return (
+						<React.Fragment key={key}>
+							<ZodSwitch
+								mayPad
+								jsonPath={[...jsonPath, key]}
+								schema={shape[key]}
+								value={value[key]}
+								setValue={(val, {shouldSave}) => {
+									onChange(
+										(oldVal) => {
+											return {
+												...oldVal,
+												[key]:
+													typeof val === 'function' ? val(oldVal[key]) : val,
+											};
+										},
+										{shouldSave},
+									);
+								}}
+								onRemove={null}
+							/>
+						</React.Fragment>
+					);
+				})}
+			</SchemaVerticalGuide>
+		</Fieldset>
 	);
 
+	if (isRoot) {
+		return fields;
+	}
+
 	return (
-		<Fieldset shouldPad={!isRoot && mayPad}>
-			{isRoot ? null : (
-				<SchemaLabel
-					jsonPath={jsonPath}
-					onRemove={onRemove}
-					suffix={suffix}
-					description={getUserFacingDescription(schema)}
-					valid={zodValidation.success}
-					handleClick={() => setExpanded(!expanded)}
-				/>
-			)}
-
-			{expanded ? (
-				<SchemaVerticalGuide isRoot={isRoot}>
-					{keys.map((key) => {
-						if (
-							discriminatedUnionReplacement &&
-							key === discriminatedUnionReplacement.discriminator
-						) {
-							return discriminatedUnionReplacement.markup;
-						}
-
-						return (
-							<React.Fragment key={key}>
-								<ZodSwitch
-									mayPad
-									jsonPath={[...jsonPath, key]}
-									schema={shape[key]}
-									value={value[key]}
-									setValue={(val, {shouldSave}) => {
-										onChange(
-											(oldVal) => {
-												return {
-													...oldVal,
-													[key]:
-														typeof val === 'function' ? val(oldVal[key]) : val,
-												};
-											},
-											{shouldSave},
-										);
-									}}
-									onRemove={null}
-								/>
-							</React.Fragment>
-						);
-					})}
-				</SchemaVerticalGuide>
-			) : null}
-			{isRoot || !expanded ? null : <div style={fieldsetLabel}>{'}'}</div>}
-		</Fieldset>
+		<Folder
+			title={getDialKitLabel(jsonPath)}
+			defaultOpen={shouldOpenDialKitFolder(jsonPath)}
+			inline
+		>
+			{fields}
+		</Folder>
 	);
 };

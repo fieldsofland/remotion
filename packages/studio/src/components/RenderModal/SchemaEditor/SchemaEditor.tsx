@@ -1,3 +1,4 @@
+import {Folder} from 'dialkit';
 import React from 'react';
 import {useZodIfPossible} from '../../get-zod-if-possible';
 import {VERTICAL_SCROLLBAR_CLASSNAME} from '../../Menu/is-menu-item';
@@ -99,17 +100,23 @@ export const SchemaEditor: React.FC<{
 		<div
 			ref={defaultPropsEditorScrollableAreaRef}
 			style={containerStyle}
-			className={scrollableContainer ? VERTICAL_SCROLLBAR_CLASSNAME : undefined}
+			className={
+				scrollableContainer
+					? `dialkit-root ${VERTICAL_SCROLLBAR_CLASSNAME}`
+					: 'dialkit-root'
+			}
 		>
-			<ZodObjectEditor
-				discriminatedUnionReplacement={null}
-				value={value as Record<string, unknown>}
-				setValue={setValue}
-				jsonPath={[]}
-				schema={schema}
-				onRemove={null}
-				mayPad
-			/>
+			<Folder title="Props" defaultOpen inline>
+				<ZodObjectEditor
+					discriminatedUnionReplacement={null}
+					value={value as Record<string, unknown>}
+					setValue={setValue}
+					jsonPath={[]}
+					schema={schema}
+					onRemove={null}
+					mayPad
+				/>
+			</Folder>
 		</div>
 	);
 };

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import {Internals} from 'remotion';
 import {NoReactInternals} from 'remotion/no-react';
 import {NoRegisterRoot} from './components/NoRegisterRoot';
+import {dialKitStyles} from './dialkit-styles.generated';
 import {startErrorOverlay} from './error-overlay/entry-basic';
 import {BACKGROUND_HEX} from './helpers/colors';
 import {installFiberCommitOrderObserver} from './helpers/install-fiber-sequence-order-observer';
@@ -14,6 +15,7 @@ installFiberCommitOrderObserver(window);
 Internals.CSSUtils.injectCSS(
 	Internals.CSSUtils.makeDefaultPreviewCSS(null, BACKGROUND_HEX),
 );
+Internals.CSSUtils.injectCSS(dialKitStyles);
 
 declare global {
 	interface Window {

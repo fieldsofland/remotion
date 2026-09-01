@@ -1,18 +1,14 @@
+import {Slider} from 'dialkit';
 import {useMemo} from 'react';
-import React, {useCallback} from 'react';
-import {InputDragger} from '../../NewComposition/InputDragger';
+import React, {useCallback, useRef} from 'react';
+import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {SchemaLabel} from './SchemaLabel';
 import {
 	getZodNumberMaximum,
 	getZodNumberMinimum,
 	getZodNumberStep,
 } from './zod-number-constraints';
-import {
-	zodSafeParse,
-	type AnyZodSchema,
-	getUserFacingDescription,
-} from './zod-schema-type';
+import {zodSafeParse, type AnyZodSchema} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import {ZodFieldValidation} from './ZodFieldValidation';
 import type {UpdaterFunction} from './ZodSwitch';
@@ -28,27 +24,20 @@ export const ZodNumberEditor: React.FC<{
 	readonly setValue: UpdaterFunction<number>;
 	readonly onRemove: null | (() => void);
 	readonly mayPad: boolean;
-}> = ({jsonPath, value, schema, setValue, onRemove, mayPad}) => {
+}> = ({jsonPath, value, schema, setValue, mayPad}) => {
+	const latestValue = useRef(value);
+	latestValue.current = value;
 	const onNumberChange = useCallback(
 		(newValue: number) => {
+			latestValue.current = newValue;
 			setValue(() => newValue, {shouldSave: false});
 		},
 		[setValue],
 	);
 
-	const onNumberChangeEnd = useCallback(
-		(newValue: number) => {
-			setValue(() => newValue, {shouldSave: true});
-		},
-		[setValue],
-	);
-
-	const onTextChange = useCallback(
-		(newValue: string) => {
-			setValue(() => Number(newValue), {shouldSave: true});
-		},
-		[setValue],
-	);
+	const saveNumber = useCallback(() => {
+		setValue(() => latestValue.current, {shouldSave: true});
+	}, [setValue]);
 
 	const zodValidation = useMemo(
 		() => zodSafeParse(schema, value),
@@ -57,29 +46,22 @@ export const ZodNumberEditor: React.FC<{
 
 	return (
 		<Fieldset shouldPad={mayPad}>
-			<SchemaLabel
-				handleClick={null}
-				jsonPath={jsonPath}
-				onRemove={onRemove}
-				valid={zodValidation.success}
-				suffix={null}
-				description={getUserFacingDescription(schema)}
-			/>
-			<div style={fullWidth}>
-				<InputDragger
-					type={'number'}
+			<div style={fullWidth} onPointerUp={saveNumber} onBlur={saveNumber}>
+				<Slider
+					label={getDialKitLabel(jsonPath)}
 					value={value}
-					style={fullWidth}
-					status={zodValidation.success ? 'ok' : 'error'}
-					placeholder={jsonPath.join('.')}
-					onTextChange={onTextChange}
-					onValueChange={onNumberChange}
-					onValueChangeEnd={onNumberChangeEnd}
-					min={getZodNumberMinimum(schema)}
-					max={getZodNumberMaximum(schema)}
+					onChange={onNumberChange}
+					min={
+						Number.isFinite(getZodNumberMinimum(schema))
+							? getZodNumberMinimum(schema)
+							: undefined
+					}
+					max={
+						Number.isFinite(getZodNumberMaximum(schema))
+							? getZodNumberMaximum(schema)
+							: undefined
+					}
 					step={getZodNumberStep(schema)}
-					rightAlign={false}
-					small
 				/>
 				<ZodFieldValidation path={jsonPath} zodValidation={zodValidation} />
 			</div>

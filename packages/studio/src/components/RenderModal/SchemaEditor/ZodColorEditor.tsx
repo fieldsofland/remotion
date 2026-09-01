@@ -1,14 +1,8 @@
-import React, {useCallback, useMemo} from 'react';
-import {ColorPicker} from '../../ColorPicker/ColorPicker';
-import {Row, Spacing} from '../../layout';
-import {RemotionInput} from '../../NewComposition/RemInput';
+import {ColorControl} from 'dialkit';
+import React, {useCallback, useMemo, useRef} from 'react';
+import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {SchemaLabel} from './SchemaLabel';
-import {
-	zodSafeParse,
-	type AnyZodSchema,
-	getUserFacingDescription,
-} from './zod-schema-type';
+import {zodSafeParse, type AnyZodSchema} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import {ZodFieldValidation} from './ZodFieldValidation';
 import type {UpdaterFunction} from './ZodSwitch';
@@ -24,7 +18,9 @@ export const ZodColorEditor: React.FC<{
 	readonly setValue: UpdaterFunction<string>;
 	readonly onRemove: null | (() => void);
 	readonly mayPad: boolean;
-}> = ({jsonPath, value, setValue, schema, onRemove, mayPad}) => {
+}> = ({jsonPath, value, setValue, schema, mayPad}) => {
+	const latestValue = useRef(value);
+	latestValue.current = value;
 	const localValue = useMemo(
 		() => zodSafeParse(schema, value),
 		[schema, value],
@@ -32,65 +28,24 @@ export const ZodColorEditor: React.FC<{
 
 	const onPickerChange = useCallback(
 		(next: string) => {
+			latestValue.current = next;
 			setValue(() => next, {shouldSave: false});
 		},
 		[setValue],
 	);
 
-	const onPickerComplete = useCallback(
-		(next: string) => {
-			setValue(() => next, {shouldSave: true});
-		},
-		[setValue],
-	);
-
-	const onTextChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-		(e) => {
-			const newValue = e.target.value;
-			setValue(() => newValue, {shouldSave: false});
-		},
-		[setValue],
-	);
-
-	const onTextBlur: React.FocusEventHandler<HTMLInputElement> =
-		useCallback(() => {
-			setValue(() => value, {shouldSave: true});
-		}, [setValue, value]);
-
-	const status = localValue.success ? 'ok' : 'error';
+	const saveColor = useCallback(() => {
+		setValue(() => latestValue.current, {shouldSave: true});
+	}, [setValue]);
 
 	return (
 		<Fieldset shouldPad={mayPad}>
-			<SchemaLabel
-				handleClick={null}
-				jsonPath={jsonPath}
-				onRemove={onRemove}
-				valid={localValue.success}
-				suffix={null}
-				description={getUserFacingDescription(schema)}
-			/>
-			<div style={fullWidth}>
-				<Row align="center">
-					<ColorPicker
-						value={value}
-						status={status}
-						onChange={onPickerChange}
-						onChangeComplete={onPickerComplete}
-						width={45}
-						height={39}
-						name={jsonPath.join('.')}
-					/>
-					<Spacing x={1} block />
-					<RemotionInput
-						value={value}
-						status={status}
-						placeholder={jsonPath.join('.')}
-						onChange={onTextChange}
-						onBlur={onTextBlur}
-						rightAlign={false}
-						small
-					/>
-				</Row>
+			<div style={fullWidth} onPointerUp={saveColor} onBlur={saveColor}>
+				<ColorControl
+					label={getDialKitLabel(jsonPath)}
+					value={value}
+					onChange={onPickerChange}
+				/>
 				<ZodFieldValidation path={jsonPath} zodValidation={localValue} />
 			</div>
 		</Fieldset>
