@@ -1,4 +1,4 @@
-import {DialStore, TransitionControl, type TransitionConfig} from 'dialkit';
+import {EasingVisualization, Slider} from 'dialkit';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {useZodIfPossible} from '../../get-zod-if-possible';
 import {getDialKitLabel} from './dialkit-label';
@@ -52,26 +52,12 @@ export const ZodTupleEditor: React.FC<{
 		/ease|easing/i.test(String(jsonPath[jsonPath.length - 1]));
 	const latestEase = useRef(value);
 	latestEase.current = value;
-	const easingPath = jsonPath.join('.');
-	if (
-		isEasingTuple &&
-		DialStore.getTransitionMode('remotion-schema-editor', easingPath) !==
-			'easing'
-	) {
-		DialStore.updateTransitionMode(
-			'remotion-schema-editor',
-			easingPath,
-			'easing',
-		);
-	}
 	const onEasingChange = useCallback(
-		(next: TransitionConfig) => {
-			if (next.type !== 'easing') {
-				return;
-			}
-
-			latestEase.current = next.ease;
-			setValue(() => next.ease, {shouldSave: false});
+		(index: number, nextValue: number) => {
+			const nextEase = [...latestEase.current];
+			nextEase[index] = nextValue;
+			latestEase.current = nextEase;
+			setValue(() => nextEase, {shouldSave: false});
 		},
 		[setValue],
 	);
@@ -88,25 +74,29 @@ export const ZodTupleEditor: React.FC<{
 	}
 
 	if (isEasingTuple) {
+		const easing = value as [number, number, number, number];
 		return (
 			<Fieldset shouldPad={mayPad}>
-				<div
-					className="remotion-dialkit-easing-only"
-					onPointerUp={saveEasing}
-					onBlur={saveEasing}
-				>
-					<TransitionControl
-						panelId="remotion-schema-editor"
-						path={easingPath}
-						label={getDialKitLabel(jsonPath)}
-						value={{
-							type: 'easing',
-							duration: 1,
-							ease: value as [number, number, number, number],
-						}}
-						onChange={onEasingChange}
-						hideDuration
-					/>
+				<div onPointerUp={saveEasing} onBlur={saveEasing}>
+					<div className="remotion-dialkit-easing-editor">
+						<div className="remotion-dialkit-easing-label">
+							{getDialKitLabel(jsonPath)}
+						</div>
+						<EasingVisualization
+							easing={{type: 'easing', duration: 1, ease: easing}}
+						/>
+						{(['x1', 'y1', 'x2', 'y2'] as const).map((label, index) => (
+							<Slider
+								key={label}
+								label={label}
+								value={easing[index]}
+								onChange={(next) => onEasingChange(index, next)}
+								min={label.startsWith('x') ? 0 : -1}
+								max={label.startsWith('x') ? 1 : 2}
+								step={0.01}
+							/>
+						))}
+					</div>
 					<ZodFieldValidation path={jsonPath} zodValidation={zodValidation} />
 				</div>
 			</Fieldset>

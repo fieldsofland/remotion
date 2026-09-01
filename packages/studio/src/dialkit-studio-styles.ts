@@ -162,8 +162,17 @@ body,
   background: rgba(255, 255, 255, 0.14);
 }
 
-.remotion-dialkit-easing-only .dialkit-labeled-control {
-  display: none;
+.remotion-dialkit-easing-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.remotion-dialkit-easing-label {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 2px 2px;
 }
 
 `;
