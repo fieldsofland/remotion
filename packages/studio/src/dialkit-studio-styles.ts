@@ -1,4 +1,14 @@
 export const dialKitStudioStyles = `
+body,
+.css-reset,
+.css-reset *,
+.dialkit-root,
+.dialkit-root *,
+.dialkit-select-dropdown,
+.dialkit-select-dropdown * {
+  font-family: "OpenAI Sans", system-ui, -apple-system, sans-serif !important;
+}
+
 .dialkit-root {
   --dial-surface: rgba(255, 255, 255, 0.08);
   --dial-surface-hover: rgba(255, 255, 255, 0.13);
@@ -36,6 +46,23 @@ export const dialKitStudioStyles = `
 
 .dialkit-root .dialkit-folder:not(.dialkit-folder-root) {
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dialkit-root .dialkit-folder:not(.dialkit-folder-root) > .dialkit-folder-header {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.dialkit-root .dialkit-folder:not(.dialkit-folder-root) > .dialkit-folder-content > .dialkit-folder-inner {
+  padding: 4px 8px 12px;
+}
+
+.dialkit-select-dropdown {
+  padding: 6px;
+}
+
+.dialkit-select-option {
+  padding: 9px 12px;
 }
 
 .dialkit-root .dialkit-folder-header:hover .dialkit-folder-title {
