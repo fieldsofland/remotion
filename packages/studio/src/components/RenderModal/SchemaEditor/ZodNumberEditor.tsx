@@ -3,11 +3,7 @@ import {useMemo} from 'react';
 import React, {useCallback, useRef} from 'react';
 import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
-import {
-	getZodNumberMaximum,
-	getZodNumberMinimum,
-	getZodNumberStep,
-} from './zod-number-constraints';
+import {getDialKitNumberConstraints} from './zod-number-constraints';
 import {zodSafeParse, type AnyZodSchema} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
 import {ZodFieldValidation} from './ZodFieldValidation';
@@ -43,6 +39,10 @@ export const ZodNumberEditor: React.FC<{
 		() => zodSafeParse(schema, value),
 		[schema, value],
 	);
+	const constraints = useMemo(
+		() => getDialKitNumberConstraints({schema, value}),
+		[schema, value],
+	);
 
 	return (
 		<Fieldset shouldPad={mayPad}>
@@ -51,17 +51,9 @@ export const ZodNumberEditor: React.FC<{
 					label={getDialKitLabel(jsonPath)}
 					value={value}
 					onChange={onNumberChange}
-					min={
-						Number.isFinite(getZodNumberMinimum(schema))
-							? getZodNumberMinimum(schema)
-							: undefined
-					}
-					max={
-						Number.isFinite(getZodNumberMaximum(schema))
-							? getZodNumberMaximum(schema)
-							: undefined
-					}
-					step={getZodNumberStep(schema)}
+					min={constraints.min}
+					max={constraints.max}
+					step={constraints.step}
 				/>
 				<ZodFieldValidation path={jsonPath} zodValidation={zodValidation} />
 			</div>

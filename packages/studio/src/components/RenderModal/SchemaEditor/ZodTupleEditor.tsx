@@ -1,5 +1,7 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import {TransitionControl, type TransitionConfig} from 'dialkit';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {useZodIfPossible} from '../../get-zod-if-possible';
+import {getDialKitLabel} from './dialkit-label';
 import {Fieldset} from './Fieldset';
 import {SchemaLabel} from './SchemaLabel';
 import {SchemaArrayItemSeparationLine} from './SchemaSeparationLine';
@@ -8,6 +10,7 @@ import {
 	zodSafeParse,
 	type AnyZodSchema,
 	getUserFacingDescription,
+	getZodSchemaType,
 } from './zod-schema-type';
 import {getTupleItems} from './zod-schema-type';
 import type {JSONPath} from './zod-types';
@@ -41,6 +44,28 @@ export const ZodTupleEditor: React.FC<{
 	const [expanded, setExpanded] = useState(true);
 
 	const tupleItems = getTupleItems(schema);
+	const isEasingTuple =
+		value.length === 4 &&
+		tupleItems.length === 4 &&
+		tupleItems.every((item) => getZodSchemaType(item) === 'number') &&
+		typeof jsonPath[jsonPath.length - 1] === 'string' &&
+		/ease|easing/i.test(String(jsonPath[jsonPath.length - 1]));
+	const latestEase = useRef(value);
+	latestEase.current = value;
+	const onEasingChange = useCallback(
+		(next: TransitionConfig) => {
+			if (next.type !== 'easing') {
+				return;
+			}
+
+			latestEase.current = next.ease;
+			setValue(() => next.ease, {shouldSave: false});
+		},
+		[setValue],
+	);
+	const saveEasing = useCallback(() => {
+		setValue(() => latestEase.current, {shouldSave: true});
+	}, [setValue]);
 
 	const suffix = useMemo(() => {
 		return expanded ? ' [' : ' [...] ';
@@ -48,6 +73,28 @@ export const ZodTupleEditor: React.FC<{
 	const z = useZodIfPossible();
 	if (!z) {
 		throw new Error('expected zod');
+	}
+
+	if (isEasingTuple) {
+		return (
+			<Fieldset shouldPad={mayPad}>
+				<div onPointerUp={saveEasing} onBlur={saveEasing}>
+					<TransitionControl
+						panelId="remotion-schema-editor"
+						path={jsonPath.join('.')}
+						label={getDialKitLabel(jsonPath)}
+						value={{
+							type: 'easing',
+							duration: 1,
+							ease: value as [number, number, number, number],
+						}}
+						onChange={onEasingChange}
+						hideDuration
+					/>
+					<ZodFieldValidation path={jsonPath} zodValidation={zodValidation} />
+				</div>
+			</Fieldset>
+		);
 	}
 
 	return (

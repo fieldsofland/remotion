@@ -104,4 +104,15 @@ body,
 .dialkit-root .dialkit-folder-header:hover .dialkit-folder-title {
   color: rgba(255, 255, 255, 0.95);
 }
+
+.remotion-splitter-vertical {
+  background: rgba(255, 255, 255, 0.035);
+  cursor: col-resize;
+  position: relative;
+  transition: background 150ms;
+}
+
+.remotion-splitter-vertical:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
 `;

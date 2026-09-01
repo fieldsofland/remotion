@@ -68,3 +68,66 @@ export const getZodNumberStep = (schema: AnyZodSchema): number | undefined => {
 
 	return undefined;
 };
+
+export const isZodNumberInteger = (schema: AnyZodSchema): boolean => {
+	const {checks} = getZodDef(schema);
+	if (!checks) return false;
+
+	if (isZodV3Schema(schema)) {
+		return checks.some((c: {kind: string}) => c.kind === 'int');
+	}
+
+	return checks.some(
+		(c: {_zod?: {def?: {check?: string; format?: string}}}) => {
+			const def = c._zod?.def;
+			return (
+				def?.check === 'number_format' &&
+				typeof def.format === 'string' &&
+				def.format.endsWith('int')
+			);
+		},
+	);
+};
+
+export const getDialKitNumberConstraints = ({
+	schema,
+	value,
+}: {
+	readonly schema: AnyZodSchema;
+	readonly value: number;
+}): {min: number; max: number; step: number} => {
+	const schemaMinimum = getZodNumberMinimum(schema);
+	const schemaMaximum = getZodNumberMaximum(schema);
+	const step =
+		getZodNumberStep(schema) ?? (isZodNumberInteger(schema) ? 1 : 0.01);
+	const finiteValue = Number.isFinite(value) ? value : 0;
+	const hasMinimum = Number.isFinite(schemaMinimum);
+	const hasMaximum = Number.isFinite(schemaMaximum);
+	const span = Math.max(Math.abs(finiteValue), step * 100, 10);
+
+	if (hasMinimum && hasMaximum) {
+		return {min: schemaMinimum, max: schemaMaximum, step};
+	}
+
+	if (hasMinimum) {
+		return {
+			min: schemaMinimum,
+			max: Math.max(schemaMinimum + span, finiteValue + span),
+			step,
+		};
+	}
+
+	if (hasMaximum) {
+		return {
+			min: Math.min(schemaMaximum - span, finiteValue - span),
+			max: schemaMaximum,
+			step,
+		};
+	}
+
+	return {
+		min: finiteValue - span,
+		max: finiteValue + span,
+		step,
+	};
+};

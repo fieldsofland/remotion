@@ -38,7 +38,8 @@ const row: React.CSSProperties = {
 	minHeight: 0,
 };
 
-const MAX_SIDEBAR_WIDTH = 350;
+const MAX_LEFT_SIDEBAR_WIDTH = 350;
+const MAX_RIGHT_SIDEBAR_WIDTH = 720;
 const MIN_SIDEBAR_WIDTH = 250;
 
 export const useResponsiveSidebarStatus = (): 'collapsed' | 'expanded' => {
@@ -143,7 +144,7 @@ const TopPanelInner: React.FC<{
 						minFlex={0.15}
 						maxFlex={0.4}
 						defaultFlex={0.2}
-						maxFlexerSize={MAX_SIDEBAR_WIDTH}
+						maxFlexerSize={MAX_LEFT_SIDEBAR_WIDTH}
 						minFlexerSize={null}
 						maxAntiFlexerSize={null}
 						minAntiFlexerSize={null}
@@ -168,7 +169,7 @@ const TopPanelInner: React.FC<{
 								defaultFlex={0.7}
 								maxFlexerSize={null}
 								minFlexerSize={null}
-								maxAntiFlexerSize={MAX_SIDEBAR_WIDTH}
+								maxAntiFlexerSize={MAX_RIGHT_SIDEBAR_WIDTH}
 								minAntiFlexerSize={MIN_SIDEBAR_WIDTH}
 								id="canvas-to-right-sidebar"
 								orientation="vertical"
