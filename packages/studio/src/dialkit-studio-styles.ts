@@ -10,11 +10,20 @@ body,
 }
 
 .dialkit-root {
-  --dial-surface: rgba(255, 255, 255, 0.08);
-  --dial-surface-hover: rgba(255, 255, 255, 0.13);
-  --dial-surface-active: rgba(255, 255, 255, 0.2);
-  --dial-surface-subtle: rgba(255, 255, 255, 0.1);
-  --dial-border-hover: rgba(255, 255, 255, 0.34);
+  --dial-glass-bg: #171716;
+  --dial-dropdown-bg: #1d1d1b;
+  --dial-surface: rgba(255, 255, 255, 0.065);
+  --dial-surface-hover: rgba(255, 255, 255, 0.1);
+  --dial-surface-active: rgba(255, 255, 255, 0.16);
+  --dial-surface-subtle: rgba(255, 255, 255, 0.075);
+  --dial-border-hover: rgba(255, 255, 255, 0.28);
+}
+
+.dialkit-select-dropdown {
+  --dial-glass-bg: #171716;
+  --dial-dropdown-bg: #1d1d1b;
+  --dial-surface-hover: rgba(255, 255, 255, 0.1);
+  --dial-surface-active: rgba(255, 255, 255, 0.16);
 }
 
 .dialkit-root .dialkit-slider-label,

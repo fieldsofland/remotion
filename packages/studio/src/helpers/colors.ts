@@ -9,10 +9,10 @@ export const WHITE_FULL_HEX = '#ffffff';
 export const BLACK_HEX = '#000';
 export const BLACK_FULL_HEX = '#000000';
 
-export const BACKGROUND = 'rgb(31,36,40)';
-export const BACKGROUND_HEX = '#1f2428';
-export const BACKGROUND__TRANSPARENT = 'rgba(31,36,40, 0)';
-export const INPUT_BACKGROUND = '#2f363d';
+export const BACKGROUND = 'rgb(20,20,19)';
+export const BACKGROUND_HEX = '#141413';
+export const BACKGROUND__TRANSPARENT = 'rgba(20,20,19, 0)';
+export const INPUT_BACKGROUND = '#252523';
 export const LIGHT_COLOR = '#ddd';
 export const SELECTED_BACKGROUND = 'hsla(0, 0%, 100%, 0.15)';
 export const LIGHT_TEXT = '#A6A7A9';
@@ -52,8 +52,8 @@ export const BLUE_HOVERED = '#4da3f7';
 export const BLUE_DISABLED = '#284f73';
 export const UNSELECTED_GUIDE = '#7e1219';
 export const SELECTED_GUIDE = '#d22d3a';
-export const LINE_COLOR = '#363A3E';
-export const TIMELINE_TRACK_SEPARATOR = '#13161B';
+export const LINE_COLOR = '#2e2e2b';
+export const TIMELINE_TRACK_SEPARATOR = '#0b0b0a';
 
 export const LIGHT_GRAY = '#ccc';
 export const KEYBOARD_SHORTCUT_KEY_COLOR = '#eee';
@@ -64,12 +64,12 @@ export const ERROR_CODE_FRAME_LINE_BACKGROUND = '#121212';
 export const ERROR_LINK_COLOR = '#58a6ff';
 export const INFO_BLUE = '#60a5fa';
 export const SERVER_DISCONNECTED_BACKGROUND = '#e74c3c';
-export const TIMELINE_BACKGROUND_COLOR = '#15181B';
+export const TIMELINE_BACKGROUND_COLOR = '#10100f';
 // WHITE_ALPHA_10 composited over TIMELINE_BACKGROUND_COLOR.
-export const TIMELINE_NEGATIVE_START_BACKGROUND_COLOR = '#2C2F32';
+export const TIMELINE_NEGATIVE_START_BACKGROUND_COLOR = '#252523';
 // WHITE_ALPHA_10 composited over TIMELINE_NEGATIVE_START_BACKGROUND_COLOR.
-export const TIMELINE_NEGATIVE_START_BORDER_COLOR = '#414446';
-export const TIMELINE_SELECTED_BACKGROUND_COLOR = '#3B3F42';
+export const TIMELINE_NEGATIVE_START_BORDER_COLOR = '#383834';
+export const TIMELINE_SELECTED_BACKGROUND_COLOR = '#333330';
 export const TIMELINE_SELECTED_LABEL_BACKGROUND_COLOR = '#B0B0B0';
 export const TIMELINE_BLUE = '#0b84ff';
 export const TIMELINE_PLAYHEAD_COLOR = '#f02c00';
