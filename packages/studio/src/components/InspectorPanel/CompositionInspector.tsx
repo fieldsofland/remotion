@@ -15,6 +15,7 @@ import {CloudDownloadIcon} from '../../icons/cloud-download';
 import {PicIcon} from '../../icons/frame';
 import {SolidIcon} from '../../icons/solid';
 import {FilmIcon} from '../../icons/video';
+import {EditorShowOutlinesContext} from '../../state/editor-outlines';
 import {VisualControlsContext} from '../../visual-controls/VisualControls';
 import {Button} from '../Button';
 import {useConfirmationDialog} from '../ConfirmationDialog';
@@ -51,6 +52,9 @@ import {
 	compositionVisualControlsSection,
 	defaultPropsWarningContainer,
 	inspectorOverviewSection,
+	inspectorStickyActions,
+	inspectorStickyActionsBackdrop,
+	inspectorStickyActionsSpacer,
 	scrollableContainer,
 	sectionHeaderEnd,
 	sectionHeaderRow,
@@ -69,6 +73,13 @@ const saveSettingsButton: React.CSSProperties = {
 	border: '1px solid rgba(255, 255, 255, 0.2)',
 	borderRadius: 6,
 	color: 'rgba(250, 248, 244, 0.96)',
+};
+
+const overlayButton: React.CSSProperties = {
+	backgroundColor: 'transparent',
+	border: '1px solid rgba(255, 255, 255, 0.14)',
+	borderRadius: 6,
+	color: 'rgba(255, 255, 255, 0.7)',
 };
 
 const downloadLicenseAgreement: React.CSSProperties = {
@@ -221,14 +232,7 @@ const CompositionDefaultPropsSection: React.FC<{
 	readonly currentDefaultProps: Record<string, unknown>;
 	readonly readOnlyStudio: boolean;
 	readonly setDefaultProps: UpdaterFunction<Record<string, unknown>>;
-	readonly onSaveDefaultProps: () => void;
-}> = ({
-	composition,
-	currentDefaultProps,
-	readOnlyStudio,
-	setDefaultProps,
-	onSaveDefaultProps,
-}) => {
+}> = ({composition, currentDefaultProps, readOnlyStudio, setDefaultProps}) => {
 	const z = useZodIfPossible();
 	const zodTypes = useZodTypesIfPossible();
 	const canSaveDefaultProps = useContext(ObserveDefaultPropsContext);
@@ -302,14 +306,6 @@ const CompositionDefaultPropsSection: React.FC<{
 						/>
 					</div>
 					<div style={sectionHeaderEnd}>
-						<Button
-							onClick={onSaveDefaultProps}
-							size="condensed"
-							style={saveSettingsButton}
-							title="Write the current schema settings to the composition source"
-						>
-							Save settings
-						</Button>
 						{defaultPropsWarnings.length > 0 ? (
 							<WarningIndicatorButton
 								setShowWarning={setShowWarning}
@@ -343,6 +339,43 @@ const CompositionDefaultPropsSection: React.FC<{
 				hideWarningButton
 			/>
 		</div>
+	);
+};
+
+const InspectorStickyActions: React.FC<{
+	readonly onSaveDefaultProps: () => void;
+}> = ({onSaveDefaultProps}) => {
+	const {editorShowOutlines, setEditorShowOutlines} = useContext(
+		EditorShowOutlinesContext,
+	);
+	const toggleOutlines = useCallback(() => {
+		setEditorShowOutlines((current) => !current);
+	}, [setEditorShowOutlines]);
+
+	return (
+		<>
+			<div style={inspectorStickyActionsSpacer} />
+			<div style={inspectorStickyActionsBackdrop}>
+				<div style={inspectorStickyActions}>
+					<Button
+						onClick={toggleOutlines}
+						size="compact"
+						style={overlayButton}
+						title="Show or hide selectable canvas outlines"
+					>
+						{editorShowOutlines ? 'Disable overlays' : 'Enable overlays'}
+					</Button>
+					<Button
+						onClick={onSaveDefaultProps}
+						size="compact"
+						style={saveSettingsButton}
+						title="Write the current schema settings to the composition source"
+					>
+						Save settings
+					</Button>
+				</div>
+			</div>
+		</>
 	);
 };
 
@@ -398,10 +431,10 @@ export const CompositionInspector: React.FC<{
 				currentDefaultProps={currentDefaultProps}
 				readOnlyStudio={readOnlyStudio}
 				setDefaultProps={setDefaultProps}
-				onSaveDefaultProps={onSaveDefaultProps}
 			/>
 			<CompositionVisualControlsSection readOnlyStudio={readOnlyStudio} />
 			<CompositionActions />
+			<InspectorStickyActions onSaveDefaultProps={onSaveDefaultProps} />
 		</div>
 	);
 };

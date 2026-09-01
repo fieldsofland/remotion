@@ -25,6 +25,28 @@ export const scrollableContainer: React.CSSProperties = {
 	overflowY: 'auto',
 };
 
+export const inspectorStickyActionsSpacer: React.CSSProperties = {
+	flexShrink: 0,
+	height: 64,
+};
+
+export const inspectorStickyActionsBackdrop: React.CSSProperties = {
+	background: `linear-gradient(to bottom, transparent, ${BACKGROUND} 18px)`,
+	bottom: 0,
+	boxSizing: 'border-box',
+	marginTop: -64,
+	padding: '18px 12px 12px',
+	position: 'sticky',
+	zIndex: 3,
+};
+
+export const inspectorStickyActions: React.CSSProperties = {
+	alignItems: 'center',
+	display: 'flex',
+	gap: 8,
+	justifyContent: 'flex-end',
+};
+
 export const compositionDefaultPropsSection: React.CSSProperties = {
 	display: 'flex',
 	flexDirection: 'column',
