@@ -17,6 +17,32 @@ body,
   --dial-border-hover: rgba(255, 255, 255, 0.34);
 }
 
+.dialkit-root .dialkit-slider-label,
+.dialkit-root .dialkit-slider-value,
+.dialkit-root .dialkit-slider-input,
+.dialkit-root .dialkit-toggle,
+.dialkit-root .dialkit-text-input,
+.dialkit-root .dialkit-color-control,
+.dialkit-root .dialkit-select-trigger,
+.dialkit-root .dialkit-select-label,
+.dialkit-root .dialkit-select-value,
+.dialkit-root .dialkit-segmented-button {
+  font-size: 12px;
+}
+
+.dialkit-root button,
+.dialkit-root input {
+  font-size: 12px;
+}
+
+.dialkit-root .dialkit-folder-title {
+  font-size: 13px;
+}
+
+.dialkit-root .dialkit-folder-title-root {
+  font-size: 14px;
+}
+
 .dialkit-root .dialkit-slider-wrapper {
   min-height: var(--dial-row-height);
 }
@@ -63,6 +89,7 @@ body,
 
 .dialkit-select-option {
   padding: 9px 12px;
+  font-size: 12px;
 }
 
 .dialkit-root .dialkit-folder-header:hover .dialkit-folder-title {
