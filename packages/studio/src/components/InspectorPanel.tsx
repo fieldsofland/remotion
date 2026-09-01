@@ -15,7 +15,14 @@ export const InspectorPanel: React.FC<{
 	readonly currentDefaultProps: Record<string, unknown>;
 	readonly readOnlyStudio: boolean;
 	readonly setDefaultProps: UpdaterFunction<Record<string, unknown>>;
-}> = ({composition, currentDefaultProps, readOnlyStudio, setDefaultProps}) => {
+	readonly onSaveDefaultProps: () => void;
+}> = ({
+	composition,
+	currentDefaultProps,
+	readOnlyStudio,
+	setDefaultProps,
+	onSaveDefaultProps,
+}) => {
 	const {canvasContent} = useContext(Internals.CompositionManager);
 	const {selectedItems} = useTimelineSelection();
 	const sameSequenceInspectorSelection = useMemo(
@@ -38,6 +45,7 @@ export const InspectorPanel: React.FC<{
 				currentDefaultProps={currentDefaultProps}
 				readOnlyStudio={readOnlyStudio}
 				setDefaultProps={setDefaultProps}
+				onSaveDefaultProps={onSaveDefaultProps}
 			/>
 		);
 	}

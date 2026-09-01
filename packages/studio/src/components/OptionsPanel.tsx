@@ -227,6 +227,10 @@ export const OptionsPanel: React.FC<{
 		[compositionId, compositionDefaultProps, saveToFile, updateProps],
 	);
 
+	const saveCurrentDefaultProps = useCallback(() => {
+		saveToFile(() => currentDefaultProps);
+	}, [currentDefaultProps, saveToFile]);
+
 	const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
 		// Prevent deselection of currently selected items
 		e.stopPropagation();
@@ -258,6 +262,7 @@ export const OptionsPanel: React.FC<{
 					currentDefaultProps={currentDefaultProps}
 					readOnlyStudio={readOnlyStudio}
 					setDefaultProps={setDefaultProps}
+					onSaveDefaultProps={saveCurrentDefaultProps}
 				/>
 			) : (
 				<RenderQueue />

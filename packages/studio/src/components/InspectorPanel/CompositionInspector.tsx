@@ -16,6 +16,7 @@ import {PicIcon} from '../../icons/frame';
 import {SolidIcon} from '../../icons/solid';
 import {FilmIcon} from '../../icons/video';
 import {VisualControlsContext} from '../../visual-controls/VisualControls';
+import {Button} from '../Button';
 import {useConfirmationDialog} from '../ConfirmationDialog';
 import {DefaultPropsEditor} from '../DefaultPropsEditor';
 import {useZodIfPossible, useZodTypesIfPossible} from '../get-zod-if-possible';
@@ -61,6 +62,13 @@ import {useCompositionActions} from './use-composition-actions';
 const actionIconStyle: React.CSSProperties = {
 	height: 18,
 	width: 18,
+};
+
+const saveSettingsButton: React.CSSProperties = {
+	backgroundColor: 'rgba(116, 139, 255, 0.22)',
+	border: '1px solid rgba(150, 168, 255, 0.48)',
+	borderRadius: 6,
+	color: 'rgba(235, 238, 255, 0.96)',
 };
 
 const downloadLicenseAgreement: React.CSSProperties = {
@@ -213,7 +221,14 @@ const CompositionDefaultPropsSection: React.FC<{
 	readonly currentDefaultProps: Record<string, unknown>;
 	readonly readOnlyStudio: boolean;
 	readonly setDefaultProps: UpdaterFunction<Record<string, unknown>>;
-}> = ({composition, currentDefaultProps, readOnlyStudio, setDefaultProps}) => {
+	readonly onSaveDefaultProps: () => void;
+}> = ({
+	composition,
+	currentDefaultProps,
+	readOnlyStudio,
+	setDefaultProps,
+	onSaveDefaultProps,
+}) => {
 	const z = useZodIfPossible();
 	const zodTypes = useZodTypesIfPossible();
 	const canSaveDefaultProps = useContext(ObserveDefaultPropsContext);
@@ -287,6 +302,14 @@ const CompositionDefaultPropsSection: React.FC<{
 						/>
 					</div>
 					<div style={sectionHeaderEnd}>
+						<Button
+							onClick={onSaveDefaultProps}
+							size="condensed"
+							style={saveSettingsButton}
+							title="Write the current schema settings to the composition source"
+						>
+							Save settings
+						</Button>
 						{defaultPropsWarnings.length > 0 ? (
 							<WarningIndicatorButton
 								setShowWarning={setShowWarning}
@@ -349,7 +372,14 @@ export const CompositionInspector: React.FC<{
 	readonly currentDefaultProps: Record<string, unknown>;
 	readonly readOnlyStudio: boolean;
 	readonly setDefaultProps: UpdaterFunction<Record<string, unknown>>;
-}> = ({composition, currentDefaultProps, readOnlyStudio, setDefaultProps}) => {
+	readonly onSaveDefaultProps: () => void;
+}> = ({
+	composition,
+	currentDefaultProps,
+	readOnlyStudio,
+	setDefaultProps,
+	onSaveDefaultProps,
+}) => {
 	const {previewServerState} = useContext(StudioServerConnectionCtx);
 
 	return (
@@ -368,6 +398,7 @@ export const CompositionInspector: React.FC<{
 				currentDefaultProps={currentDefaultProps}
 				readOnlyStudio={readOnlyStudio}
 				setDefaultProps={setDefaultProps}
+				onSaveDefaultProps={onSaveDefaultProps}
 			/>
 			<CompositionVisualControlsSection readOnlyStudio={readOnlyStudio} />
 			<CompositionActions />

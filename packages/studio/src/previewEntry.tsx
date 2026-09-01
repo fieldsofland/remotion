@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import {Internals} from 'remotion';
 import {NoReactInternals} from 'remotion/no-react';
 import {NoRegisterRoot} from './components/NoRegisterRoot';
+import {dialKitStudioStyles} from './dialkit-studio-styles';
 import {dialKitStyles} from './dialkit-styles.generated';
 import {startErrorOverlay} from './error-overlay/entry-basic';
 import {BACKGROUND_HEX} from './helpers/colors';
@@ -16,6 +17,7 @@ Internals.CSSUtils.injectCSS(
 	Internals.CSSUtils.makeDefaultPreviewCSS(null, BACKGROUND_HEX),
 );
 Internals.CSSUtils.injectCSS(dialKitStyles);
+Internals.CSSUtils.injectCSS(dialKitStudioStyles);
 
 declare global {
 	interface Window {

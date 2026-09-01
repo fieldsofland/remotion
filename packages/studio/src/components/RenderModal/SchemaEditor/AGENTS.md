@@ -12,6 +12,7 @@ This fork renders common Zod composition props with DialKit while retaining Remo
 - Send `{shouldSave: false}` while a continuous value changes. Send `{shouldSave: true}` on pointer release or blur. Discrete controls such as toggles and selects save immediately.
 - Do not remove the JSON editor. It is the escape hatch for schema types DialKit does not represent.
 - After changing the DialKit version, run `bun run embed-dialkit-styles` from `packages/studio` and commit the generated stylesheet module.
+- Keep Studio-specific contrast and layout fixes in `src/dialkit-studio-styles.ts`. Do not edit the generated DialKit stylesheet.
 
 ## Verification
 
