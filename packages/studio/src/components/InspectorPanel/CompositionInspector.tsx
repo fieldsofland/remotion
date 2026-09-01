@@ -65,10 +65,10 @@ const actionIconStyle: React.CSSProperties = {
 };
 
 const saveSettingsButton: React.CSSProperties = {
-	backgroundColor: 'rgba(116, 139, 255, 0.22)',
-	border: '1px solid rgba(150, 168, 255, 0.48)',
+	backgroundColor: 'rgba(255, 255, 255, 0.1)',
+	border: '1px solid rgba(255, 255, 255, 0.2)',
 	borderRadius: 6,
-	color: 'rgba(235, 238, 255, 0.96)',
+	color: 'rgba(250, 248, 244, 0.96)',
 };
 
 const downloadLicenseAgreement: React.CSSProperties = {

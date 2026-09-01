@@ -2,9 +2,9 @@ export const dialKitStudioStyles = `
 .dialkit-root {
   --dial-surface: rgba(255, 255, 255, 0.08);
   --dial-surface-hover: rgba(255, 255, 255, 0.13);
-  --dial-surface-active: rgba(116, 139, 255, 0.3);
+  --dial-surface-active: rgba(255, 255, 255, 0.2);
   --dial-surface-subtle: rgba(255, 255, 255, 0.1);
-  --dial-border-hover: rgba(150, 168, 255, 0.58);
+  --dial-border-hover: rgba(255, 255, 255, 0.34);
 }
 
 .dialkit-root .dialkit-slider-wrapper {
@@ -23,15 +23,15 @@ export const dialKitStudioStyles = `
 
 .dialkit-root .dialkit-slider-fill {
   background: var(--dial-surface-active) !important;
-  border-right: 1px solid rgba(173, 185, 255, 0.65);
+  border-right: 1px solid rgba(255, 255, 255, 0.52);
 }
 
 .dialkit-root .dialkit-slider-handle {
   width: 2px;
   opacity: 0.9 !important;
   transform: translateY(-50%) scaleX(1) !important;
-  background: rgba(225, 230, 255, 0.96);
-  box-shadow: 0 0 8px rgba(139, 158, 255, 0.65);
+  background: rgba(250, 248, 244, 0.96);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.34);
 }
 
 .dialkit-root .dialkit-folder:not(.dialkit-folder-root) {
