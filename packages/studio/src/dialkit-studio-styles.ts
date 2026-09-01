@@ -115,8 +115,10 @@ body,
 .dialkit-root .dialkit-select-trigger,
 .dialkit-root .dialkit-text-input,
 .dialkit-root .dialkit-color-control {
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background: var(--dial-surface) !important;
+  border: 1px solid transparent;
+  border-radius: var(--dial-radius) !important;
+  box-shadow: none;
   transition: background 140ms, border-color 140ms, box-shadow 140ms;
 }
 
@@ -124,7 +126,34 @@ body,
 .dialkit-root .dialkit-text-input:hover,
 .dialkit-root .dialkit-color-control:hover {
   border-color: rgba(255, 255, 255, 0.16);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 3px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: none;
+}
+
+.dialkit-root .dialkit-color-label,
+.dialkit-root .dialkit-color-hex,
+.dialkit-root .dialkit-color-hex-input,
+.dialkit-root .dialkit-labeled-control-label {
+  font-size: 12px !important;
+  line-height: 17px;
+}
+
+.dialkit-root .dialkit-color-swatch {
+  border: 1px solid var(--dial-border-hover) !important;
+  border-radius: 4px !important;
+  height: 20px !important;
+  padding: 0 !important;
+  width: 20px !important;
+}
+
+.dialkit-root .dialkit-labeled-control {
+  background: var(--dial-surface) !important;
+  border-radius: var(--dial-radius) !important;
+}
+
+.dialkit-root .dialkit-segmented,
+.dialkit-root .dialkit-segmented-pill,
+.dialkit-root .dialkit-segmented-button {
+  border-radius: 6px !important;
 }
 
 .dialkit-root button:focus-visible,
