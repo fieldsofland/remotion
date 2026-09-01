@@ -58,12 +58,19 @@ body,
 
 .dialkit-root .dialkit-slider {
   background: var(--dial-surface) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: background 140ms, border-color 140ms, box-shadow 140ms;
 }
 
 .dialkit-root .dialkit-slider:hover {
   background: var(--dial-surface-hover) !important;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 3px 10px rgba(0, 0, 0, 0.22);
+}
+
+.dialkit-root .dialkit-slider-active {
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 .dialkit-root .dialkit-slider-fill {
@@ -105,6 +112,45 @@ body,
   color: rgba(255, 255, 255, 0.95);
 }
 
+.dialkit-root .dialkit-select-trigger,
+.dialkit-root .dialkit-text-input,
+.dialkit-root .dialkit-color-control {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: background 140ms, border-color 140ms, box-shadow 140ms;
+}
+
+.dialkit-root .dialkit-select-trigger:hover,
+.dialkit-root .dialkit-text-input:hover,
+.dialkit-root .dialkit-color-control:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 3px 10px rgba(0, 0, 0, 0.22);
+}
+
+.dialkit-root button:focus-visible,
+.dialkit-root input:focus-visible,
+.dialkit-select-dropdown button:focus-visible {
+  outline: 1px solid rgba(250, 248, 244, 0.9);
+  outline-offset: 2px;
+}
+
+.dialkit-select-dropdown {
+  border-color: rgba(255, 255, 255, 0.13);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.dialkit-select-option {
+  transition: background 120ms, color 120ms;
+}
+
+.dialkit-root .dialkit-easing-viz,
+.dialkit-root .dialkit-spring-viz {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
 .remotion-splitter-vertical {
   background: rgba(255, 255, 255, 0.035);
   cursor: col-resize;
@@ -128,6 +174,12 @@ body,
   height: 20px;
   padding: 2px;
   width: 36px;
+  transition: background 140ms, border-color 140ms, box-shadow 140ms;
+}
+
+.remotion-dialkit-toggle .dialkit-segmented:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.24);
 }
 
 .remotion-dialkit-toggle .dialkit-segmented-button {
